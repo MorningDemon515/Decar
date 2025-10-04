@@ -1,0 +1,3 @@
+[submodule "src/MD_Math_II"]
+	path = src/MD_Math_II
+	url = https://github.com/MorningDemon515/MDM-II.git
