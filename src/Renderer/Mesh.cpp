@@ -4,13 +4,16 @@
 
 Mesh::Mesh(
 	std::vector<mdm::Vector::Vec3> pos,
-	std::vector<unsigned int> indices)
+	std::vector<mdm::Vector::Vec2> tex,
+	std::vector<unsigned int> indices
+)
 {
 
 	Vertex temp;
 	for (int i = 0; i < pos.size(); i++)
 	{
 		temp.position = pos[i];
+		temp.texCoord = tex[i];
 		vertices.push_back(temp);
 	}
 
@@ -29,6 +32,9 @@ Mesh::Mesh(
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+	glEnableVertexAttribArray(1);
 }
 
 Mesh::~Mesh()

@@ -9,6 +9,7 @@
 struct Vertex
 {
 	mdm::Vector::Vec3 position;
+	mdm::Vector::Vec2 texCoord;
 };
 
 class RENDERER_API Mesh
@@ -18,6 +19,7 @@ public:
 	Mesh() { };
 	Mesh( 
 		std::vector<mdm::Vector::Vec3> pos,
+		std::vector<mdm::Vector::Vec2> tex,
 		std::vector<unsigned int> indice
 	);
 	~Mesh();

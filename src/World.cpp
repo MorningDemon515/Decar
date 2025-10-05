@@ -6,6 +6,9 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Mesh.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "Renderer/stb_image.h"
+
 using namespace mdm;
 using namespace Vector;
 using namespace Matrix;
@@ -20,30 +23,45 @@ std::unique_ptr<Renderer> renderer;
 std::unique_ptr<Shader> shader;
 
 std::vector<Vec3> vertices = {
-     Vec3(-0.5f, 0.5f, 0.0f),
+     Vec3(-0.5f, -0.5f, 0.0f),
+	 Vec3(-0.5f, 0.5f, 0.0f),
+	 Vec3(0.5f, 0.5f, 0.0f),
+
 	 Vec3(-0.5f, -0.5f, 0.0f),
 	 Vec3(0.5f, 0.5f, 0.0f),
 	 Vec3(0.5f, -0.5f, 0.0f)
 };
 
+std::vector<Vec2> texCoords = {
+    Vec2(0.0f, 0.0f),
+	Vec2(0.0f, 1.0f),
+	Vec2(1.0f, 1.0f),
+
+	Vec2(0.0f, 0.0f),
+	Vec2(1.0f, 1.0f),
+	Vec2(1.0f, 0.0f)
+};
+
 std::vector<unsigned int> indices = {
-	1, 0, 2,
-	1, 2, 3
+	2, 1, 0,
+	5, 4, 3
 };
 
 std::unique_ptr<Mesh> Quad;
 
 MATRIX model = Identity();
-MATRIX view = ViewMatrixLH(
-	Vec3(0.0f, 0.0f, -1.0f),
+MATRIX view = ViewMatrixRH(
+	Vec3(0.0f, 0.0f, 1.0f),
 	Vec3(0.0f, 0.0f, 0.0f),
 	Vec3(0.0f, 1.0f, 0.0f)
 );
-MATRIX projection = PerspectiveMatrixLH(
+MATRIX projection = PerspectiveMatrixRH(
 	ToRadian(90.0f),
 	(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT,
 	0.1f, 100.0f
 );
+
+unsigned int texture;
 
 bool InitWorld()
 {
@@ -54,7 +72,24 @@ bool InitWorld()
 	glEnable(GL_CULL_FACE);
 
 	shader = std::make_unique<Shader>("resources/shaders/vertex.txt", "resources/shaders/fragment.txt");
-	Quad = std::make_unique<Mesh>(vertices, indices);
+	Quad = std::make_unique<Mesh>(vertices, texCoords,indices);
+
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("resources/image.jpg", &width, &height, &nrChannels, 0);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(data);
 
 	return true;
 }
@@ -67,6 +102,7 @@ void RenderWorld(float timeDelta)
 	shader->SetMatrix("model", model);
     shader->SetMatrix("view", view);
 	shader->SetMatrix("projection", projection);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	Quad->Draw();
 
 	renderer->Present();
