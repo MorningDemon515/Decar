@@ -8,7 +8,6 @@
 SDL_Window* window = nullptr;
 SDL_WindowFlags windowFlags = SDL_WINDOW_OPENGL;
 
-SDL_Event event;
 bool run = true;
 
 bool InitWorld();
@@ -50,12 +49,6 @@ int main()
 	{
 		float currentTime = (float)SDL_GetTicks();
 		float timeDelta = (currentTime - lastTime) * 0.001f;
-
-		SDL_PollEvent(&event);
-		if (event.type == SDL_EVENT_QUIT)
-		{
-			run = false;
-		}
 
 		RenderWorld(timeDelta);
 

@@ -8,6 +8,7 @@
 
 #include "Renderer/stb_image.h"
 #include "Renderer/Texture.h"
+#include "Input.h"
 
 using namespace mdm;
 using namespace Vector;
@@ -16,8 +17,9 @@ using namespace Transform;
 using namespace Common;
 
 extern SDL_Window* window;
-extern SDL_Event event;
 extern bool run;
+
+std::unique_ptr<Input> input;
 
 std::unique_ptr<Renderer> renderer;
 std::unique_ptr<Shader> shader;
@@ -49,11 +51,15 @@ std::vector<unsigned int> indices = {
 
 std::unique_ptr<Mesh> Quad;
 
+Vec3 eye(0.0f, 0.0f, 1.0f);
+Vec3 up(0.0f, 1.0f, 0.0f);
+Vec3 front(0.0f, 0.0f, -1.0f);
+
 MATRIX model = Identity();
 MATRIX view = ViewMatrixRH(
-	Vec3(0.0f, 0.0f, 1.0f),
-	Vec3(0.0f, 0.0f, 0.0f),
-	Vec3(0.0f, 1.0f, 0.0f)
+	eye,
+	eye + front,
+	up
 );
 MATRIX projection = PerspectiveMatrixRH(
 	ToRadian(90.0f),
@@ -67,6 +73,8 @@ std::unique_ptr<Texture> texture2;
 bool InitWorld()
 {
 	SDL_SetWindowTitle(window, "Decar");
+
+	input = std::make_unique<Input>(window);
 
 	renderer = std::make_unique<Renderer>(window);
 	glEnable(GL_DEPTH_TEST);
@@ -85,8 +93,12 @@ bool InitWorld()
 	return true;
 }
 
+float x = 0.0f, y = 0.0f, z = 1.0f;
+
 void RenderWorld(float timeDelta)
 {
+	input->Update();
+
 	renderer->Clear(0.1f, 0.1f, 0.1f);
 
 	shader->Use();
