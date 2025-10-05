@@ -51,15 +51,13 @@ std::vector<unsigned int> indices = {
 
 std::unique_ptr<Mesh> Quad;
 
-Vec3 eye(0.0f, 0.0f, 1.0f);
-Vec3 up(0.0f, 1.0f, 0.0f);
-Vec3 front(0.0f, 0.0f, -1.0f);
+Vec3 camPos(0.0f, 0.0f, 1.0f);
+Vec3 camUp(0.0f, 1.0f, 0.0f);
+Vec3 camFront(0.0f, 0.0f, -1.0f);
 
 MATRIX model = Identity();
 MATRIX view = ViewMatrixRH(
-	eye,
-	eye + front,
-	up
+	camPos, camPos + camFront, camUp 
 );
 MATRIX projection = PerspectiveMatrixRH(
 	ToRadian(90.0f),
@@ -78,7 +76,7 @@ bool InitWorld()
 
 	renderer = std::make_unique<Renderer>(window);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -93,11 +91,52 @@ bool InitWorld()
 	return true;
 }
 
-float x = 0.0f, y = 0.0f, z = 1.0f;
+float pitch = 0.0f, yaw = -90.0f;
 
 void RenderWorld(float timeDelta)
 {
 	input->Update();
+
+	float mouseSpeed = 100.0f * timeDelta;
+	if (input->IsKeyDown(SDLK_UP))
+		pitch += mouseSpeed;
+
+	if (input->IsKeyDown(SDLK_DOWN))
+		pitch -= mouseSpeed;
+
+	if (input->IsKeyDown(SDLK_LEFT))
+		yaw -= mouseSpeed;
+
+	if (input->IsKeyDown(SDLK_RIGHT))
+		yaw += mouseSpeed;
+
+	//FPS
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
+
+	camFront.x = Cos(ToRadian(pitch)) * Cos(ToRadian(yaw));
+	camFront.y = Sin(ToRadian(pitch));
+	camFront.z = Cos(ToRadian(pitch)) * Sin(ToRadian(yaw));
+	camFront = General::Normalize(camFront);
+
+	float camSpeed = 2.0f * timeDelta;
+	if (input->IsKeyDown(SDLK_W))
+		camPos += camFront * camSpeed;
+
+	if (input->IsKeyDown(SDLK_S))
+		camPos -= camFront * camSpeed;
+
+	if (input->IsKeyDown(SDLK_A))
+		camPos -= General::Normalize(Cross(camFront, camUp)) * camSpeed;
+
+	if (input->IsKeyDown(SDLK_D))
+		camPos += General::Normalize(Cross(camFront, camUp)) * camSpeed;
+
+	view = ViewMatrixRH(
+		camPos, camPos + camFront, camUp
+	);
 
 	renderer->Clear(0.1f, 0.1f, 0.1f);
 
