@@ -6,9 +6,6 @@
 #include "Main.h"
 #include <iostream>
 
-#include <SDL3/SDL.h>
-#include <glad/glad.h>
-
 SDL_Window* window = nullptr;
 SDL_WindowFlags windowFlags = SDL_WINDOW_OPENGL;
 
@@ -71,9 +68,4 @@ int main()
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return 0;
-}
-
-void ErrorMessage(const char* message)
-{
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Engine Error!", message, window);
 }

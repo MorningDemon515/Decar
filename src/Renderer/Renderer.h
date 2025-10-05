@@ -4,7 +4,9 @@
 #include <SDL3/SDL.h>
 #include <glad/glad.h>
 
-class Renderer
+#include "std.h"
+
+class RENDERER_API Renderer
 {
 public:
 	Renderer() { };

@@ -15,7 +15,7 @@ Renderer::Renderer(SDL_Window* window)
 
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
 	{
-		ErrorMessage("Failed to Initialize OpenGL");
+		ErrorMessage("Failed to Initialize OpenGL!");
 	}
 }
 

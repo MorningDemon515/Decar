@@ -2,8 +2,9 @@
 #define SHADER_H
 
 #include <mdm.h>
+#include "std.h"
 
-class Shader
+class RENDERER_API Shader
 {
 public:
 	Shader() { };

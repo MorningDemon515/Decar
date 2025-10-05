@@ -15,8 +15,8 @@ extern SDL_Window* window;
 extern SDL_Event event;
 extern bool run;
 
-std::unique_ptr<Renderer> renderer = nullptr;
-std::unique_ptr<Shader> shader = nullptr;
+std::unique_ptr<Renderer> renderer;
+std::unique_ptr<Shader> shader;
 
 float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -73,10 +73,10 @@ void RenderWorld(float timeDelta)
 
 	shader->Use();
 	shader->SetMatrix("model", model);
-	shader->SetMatrix("view", view);
+    shader->SetMatrix("view", view);
 	shader->SetMatrix("projection", projection);
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
 	renderer->Present();

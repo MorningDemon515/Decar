@@ -1,20 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{15587088-a784-4e81-bfb0-119ccf4fe09c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MD_Math_II">
-      <UniqueIdentifier>{c5a96440-9b18-4619-8817-23b6955d58b9}</UniqueIdentifier>
+      <UniqueIdentifier>{cbedfbfd-7efd-45a9-ac04-11afa3c75cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{f6bac522-f2b9-42aa-bfb8-80db223cd9f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\World.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\MD_Math_II\src\Common.cpp">
       <Filter>MD_Math_II</Filter>
     </ClCompile>
@@ -39,17 +33,25 @@
     <ClCompile Include="src\MD_Math_II\src\Vector.cpp">
       <Filter>MD_Math_II</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Shader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL\src\glad.c">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Main.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="decar.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\MorningDemon.ico" />
+    <ClInclude Include="src\Renderer\Shader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\std.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
