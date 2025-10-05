@@ -4,7 +4,6 @@
 #endif
 
 #include "Main.h"
-#include <iostream>
 
 SDL_Window* window = nullptr;
 SDL_WindowFlags windowFlags = SDL_WINDOW_OPENGL;
