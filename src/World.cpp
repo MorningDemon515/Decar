@@ -74,7 +74,7 @@ bool InitWorld()
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	shader = std::make_unique<Shader>("resources/shaders/vertex.txt", "resources/shaders/fragment.txt");
+	shader = std::make_unique<Shader>("resources/shaders/texture_vertex.txt", "resources/shaders/texture_fragment.txt");
 	Quad = std::make_unique<Mesh>(vertices, texCoords,indices);
 
 	stbi_set_flip_vertically_on_load(true);

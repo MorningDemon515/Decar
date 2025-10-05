@@ -9,7 +9,7 @@
 
 #include <glad/glad.h>
 
-Shader::Shader(const char* vertexFile, const char* fragmentFile)
+Shader::Shader(std::string vertexFile, std::string fragmentFile)
 {
     std::string vertexCode;
     std::string fragmentCode;
@@ -36,7 +36,15 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
     }
     catch (std::ifstream::failure e)
     {
-        ErrorMessage("Unable to open the shader file!");
+        if (!vShaderFile)
+        {
+            ErrorMessage("Failed to open Vertex Shader: " + vertexFile);
+        }
+
+        if (!fShaderFile)
+        {
+            ErrorMessage("Failed to open Fragment Shader: " + fragmentFile);
+        }
     }
 
     const char* vShaderCode = vertexCode.c_str();
@@ -46,9 +54,25 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
     glShaderSource(vertexShader, 1, &vShaderCode, NULL);
     glCompileShader(vertexShader);
 
+    int  success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        ErrorMessage("Vertex Shader Compilation Failed:\n" + std::string(infoLog));
+    }
+
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
     glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        ErrorMessage("Fragment Shader Compilation Failed:\n" + std::string(infoLog));
+    }
 
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);

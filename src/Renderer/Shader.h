@@ -3,12 +3,13 @@
 
 #include <mdm.h>
 #include "std.h"
+#include <string>
 
 class RENDERER_API Shader
 {
 public:
 	Shader() { };
-	Shader(const char* vertexFile, const char* fragmentFile);
+	Shader(std::string vertexFile, std::string fragmentFile);
 	~Shader();
 
 	void Use();
