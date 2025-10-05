@@ -42,6 +42,9 @@
     <ClCompile Include="src\OpenGL\src\glad.c">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Mesh.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer\Renderer.h">
@@ -51,6 +54,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\std.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
