@@ -10,6 +10,7 @@ struct Vertex
 {
 	mdm::Vector::Vec3 position;
 	mdm::Vector::Vec2 texCoord;
+	mdm::Vector::Vec3 normal;
 };
 
 class RENDERER_API Mesh
@@ -20,6 +21,7 @@ public:
 	Mesh( 
 		std::vector<mdm::Vector::Vec3> pos,
 		std::vector<mdm::Vector::Vec2> tex,
+		std::vector<mdm::Vector::Vec3> normals,
 		std::vector<unsigned int> indice
 	);
 	~Mesh();
@@ -31,6 +33,18 @@ private:
 	unsigned int indicesCount;
 
 	unsigned int VAO, VBO, EBO;
+};
+
+class Cube
+{
+public:
+	Cube();
+	~Cube() { };
+
+	void Draw();
+
+private:
+	std::unique_ptr<Mesh> mesh;
 };
 
 #endif // !MESH_H

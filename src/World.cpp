@@ -10,6 +10,7 @@
 #include "Renderer/Texture.h"
 #include "Input.h"
 #include "Renderer/Camera.h"
+#include "Renderer/Light.h"
 
 using namespace mdm;
 using namespace Vector;
@@ -23,46 +24,25 @@ extern bool run;
 std::unique_ptr<Input> input;
 
 std::unique_ptr<Renderer> renderer;
-std::unique_ptr<Shader> shader;
-
-std::vector<Vec3> vertices = {
-     Vec3(-0.5f, -0.5f, 0.0f),
-	 Vec3(-0.5f, 0.5f, 0.0f),
-	 Vec3(0.5f, 0.5f, 0.0f),
-
-	 Vec3(-0.5f, -0.5f, 0.0f),
-	 Vec3(0.5f, 0.5f, 0.0f),
-	 Vec3(0.5f, -0.5f, 0.0f)
-};
-
-std::vector<Vec2> texCoords = {
-    Vec2(0.0f, 0.0f),
-	Vec2(0.0f, 1.0f),
-	Vec2(1.0f, 1.0f),
-
-	Vec2(0.0f, 0.0f),
-	Vec2(1.0f, 1.0f),
-	Vec2(1.0f, 0.0f)
-};
-
-std::vector<unsigned int> indices = {
-	2, 1, 0,
-	5, 4, 3
-};
-
-std::unique_ptr<Mesh> Quad;
 
 std::unique_ptr<Camera> camera;
 
-MATRIX model = Identity();
 MATRIX projection = PerspectiveMatrixRH(
-	ToRadian(90.0f),
+	ToRadian(45.0f),
 	(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT,
 	0.1f, 100.0f
 );
 
-std::unique_ptr<Texture> texture1;
-std::unique_ptr<Texture> texture2;
+std::unique_ptr<Shader> shader;
+std::unique_ptr<Cube> cube;
+
+std::unique_ptr<Shader> l_shader;
+std::unique_ptr<Cube> LightCube;
+
+Light light = {
+	Vec3(1.2f, 1.5f, 2.0f),
+	Vec3(1.0f, 1.0f, 1.0f)
+};
 
 bool InitWorld()
 {
@@ -76,15 +56,15 @@ bool InitWorld()
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	shader = std::make_unique<Shader>("resources/shaders/texture_vertex.txt", "resources/shaders/texture_fragment.txt");
-	Quad = std::make_unique<Mesh>(vertices, texCoords,indices);
-
 	stbi_set_flip_vertically_on_load(true);
 
-	texture1 = std::make_unique<Texture>("resources/image.jpg");
-	texture2 = std::make_unique<Texture>("resources/image.png");
+	camera = std::make_unique<Camera>(Vec3(0.0f, 0.0f, 3.0f));
 
-	camera = std::make_unique<Camera>(Vec3(0.0f, 0.0f, 1.0f));
+	shader = std::make_unique<Shader>("resources/shaders/cube_vertex.txt", "resources/shaders/cube_fragment.txt");
+	cube = std::make_unique<Cube>();
+
+	l_shader = std::make_unique<Shader>("resources/shaders/light_vertex.txt", "resources/shaders/light_fragment.txt");
+	LightCube = std::make_unique<Cube>();
 
 	return true;
 }
@@ -120,18 +100,26 @@ void RenderWorld(float timeDelta)
 	if (input->IsKeyDown(SDLK_D))
 		camera->Right(moveSpeed);
 
-	renderer->Clear(0.1f, 0.1f, 0.1f);
+	renderer->Clear(0.0f, 0.0f, 0.0f);
 
 	shader->Use();
-	shader->SetMatrix("model", model);
+	shader->SetMatrix("model", ScaleMatrix(0.5f, 0.5f, 0.5f));
     shader->SetMatrix("view", camera->Matrix());
 	shader->SetMatrix("projection", projection);
+	shader->SetMatrix("normalMat", NormalMatrix(ScaleMatrix(0.5f, 0.5f, 0.5f)));
+	shader->SetVec3("LightPos", light.pos);
+	shader->SetVec3("LightColor", light.color);
+	shader->SetVec3("camPos", camera->GetPos());
 
-	shader->SetInt("Texture", 0);
-	shader->SetInt("Texture1", 1);
-	texture1->Bind(0);
-	texture2->Bind(1);
-	Quad->Draw();
+	cube->Draw();
+
+	l_shader->Use();
+	l_shader->SetMatrix("model",TranslationMatrix(light.pos.x, light.pos.y, light.pos.z) * ScaleMatrix(0.2f, 0.2f, 0.2f));
+	l_shader->SetMatrix("view", camera->Matrix());
+	l_shader->SetMatrix("projection", projection);
+	l_shader->SetVec3("LightColor", light.color);
+
+	LightCube->Draw();
 
 	renderer->Present();
 }
