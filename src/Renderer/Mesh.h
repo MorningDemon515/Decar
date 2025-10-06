@@ -11,6 +11,8 @@ struct Vertex
 	mdm::Vector::Vec3 position;
 	mdm::Vector::Vec2 texCoord;
 	mdm::Vector::Vec3 normal;
+	mdm::Vector::Vec3 tangent;
+	mdm::Vector::Vec3 bitangent;
 };
 
 class RENDERER_API Mesh
@@ -33,6 +35,9 @@ private:
 	unsigned int indicesCount;
 
 	unsigned int VAO, VBO, EBO;
+
+	void ComputeTangents(std::vector<Vertex>& vertices,
+		const std::vector<unsigned int>& indices);
 };
 
 class Cube

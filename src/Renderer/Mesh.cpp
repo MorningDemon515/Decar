@@ -21,6 +21,8 @@ Mesh::Mesh(
 
 	indicesCount = indices.size();
 
+	ComputeTangents(vertices, indices);
+
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
@@ -40,6 +42,12 @@ Mesh::Mesh(
 
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 	glEnableVertexAttribArray(2);
+
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+	glEnableVertexAttribArray(3);
+
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
+	glEnableVertexAttribArray(4);
 }
 
 Mesh::~Mesh()
@@ -47,6 +55,48 @@ Mesh::~Mesh()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+}
+
+void Mesh::ComputeTangents(std::vector<Vertex>& vertices,
+	const std::vector<unsigned int>& indices)
+{
+	for (size_t i = 0; i < indices.size(); i += 3) {
+		Vertex& v0 = vertices[indices[i]];
+		Vertex& v1 = vertices[indices[i + 1]];
+		Vertex& v2 = vertices[indices[i + 2]];
+
+		mdm::Vector::Vec3 edge1 = v1.position - v0.position;
+		mdm::Vector::Vec3 edge2 = v2.position - v0.position;
+
+		mdm::Vector::Vec2 deltaUV1 = v1.texCoord - v0.texCoord;
+		mdm::Vector::Vec2 deltaUV2 = v2.texCoord - v0.texCoord;
+
+		float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+		mdm::Vector::Vec3 tangent(0.0f, 0.0f, 0.0f);
+		mdm::Vector::Vec3 bitangent(0.0f, 0.0f, 0.0f);
+
+		tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+		tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+		tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+
+		bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+		bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+		bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+
+		v0.tangent += tangent;
+		v1.tangent += tangent;
+		v2.tangent += tangent;
+
+		v0.bitangent += bitangent;
+		v1.bitangent += bitangent;
+		v2.bitangent += bitangent;
+	}
+
+	for (auto& vertex : vertices) {
+		vertex.tangent = mdm::General::Normalize(vertex.tangent);
+		vertex.bitangent = mdm::General::Normalize(vertex.bitangent);
+	}
 }
 
 void Mesh::Draw()

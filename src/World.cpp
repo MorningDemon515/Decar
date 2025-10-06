@@ -41,6 +41,7 @@ std::unique_ptr<Cube> LightCube;
 
 std::unique_ptr<Texture> container;
 std::unique_ptr<Texture> container_s;
+std::unique_ptr<Texture> container_n;
 
 Light light = {
 	Vec3(1.2f, 1.5f, 2.0f),
@@ -71,6 +72,7 @@ bool InitWorld()
 
 	container = std::make_unique<Texture>("resources/container2.png");
 	container_s = std::make_unique<Texture>("resources/container2_specular.png");
+	container_n = std::make_unique<Texture>("resources/container2_normal.png");
 
 	return true;
 }
@@ -118,8 +120,10 @@ void RenderWorld(float timeDelta)
 	shader->SetVec3("camPos", camera->GetPos());
 	shader->SetInt("container", 0);
 	shader->SetInt("container_s", 1);
+	shader->SetInt("container_n", 2);
 	container->Bind(0);
 	container_s->Bind(1);
+	container_n->Bind(2);
 
 	cube->Draw();
 
