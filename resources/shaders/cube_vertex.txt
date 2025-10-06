@@ -37,7 +37,7 @@ void main()
       vec3 B = cross(T, N);
       mat3 TBN = transpose(mat3(T, B, N));
 
-       light_Pos = TBN * LightPos;
-       cam_Pos = TBN * camPos;
-       FragPos = TBN * vec3(model * vec4(aPos, 1.0));
+       light_Pos = LightPos;//TBN * 
+       cam_Pos = camPos;//TBN * 
+       FragPos =  vec3(model * vec4(aPos, 1.0));//TBN * 
 }

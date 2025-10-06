@@ -20,10 +20,10 @@ vec3 objectNormal = texture(container_n, texCoords).xyz;
 
 void main()
 {
-      vec3 ambient = 0.05 * light_Color * objectColor;
+      vec3 ambient = 0.001 * light_Color * objectColor;
 
-      //vec3 norm = normalize(Normals);
-      vec3 norm = normalize(objectNormal * 2.0 - 1.0);
+      vec3 norm = normalize(Normals);
+      //vec3 norm = normalize(objectNormal * 2.0 - 1.0);
  
       vec3 LightDir = normalize(light_Pos - FragPos);
 
@@ -36,5 +36,6 @@ void main()
       vec3 specular = spec * light_Color * objectSpecular;
 
        vec3 result = ambient + diffuse + specular;
+       result = pow(result, vec3(1 / 2.2));
        FragColor = vec4(result, 1.0);         
 }
