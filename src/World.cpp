@@ -91,34 +91,40 @@ bool InitWorld()
 	return true;
 }
 
-float pitch = 0.0f, yaw = -90.0f;
+float angleX = 0.0f, angleY = 0.0f;
+Quaternion::QUATERNION quatX = Quaternion::FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), ToRadian(angleX));
+Quaternion::QUATERNION quatY = Quaternion::FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), ToRadian(angleY));
+Quaternion::QUATERNION quat = quatX * quatY;
 
 void RenderWorld(float timeDelta)
 {
 	input->Update();
 
 	float mouseSpeed = 100.0f * timeDelta;
+
 	if (input->IsKeyDown(SDLK_UP))
-		pitch += mouseSpeed;
+		angleY += mouseSpeed;
 
 	if (input->IsKeyDown(SDLK_DOWN))
-		pitch -= mouseSpeed;
+		angleY -= mouseSpeed;
 
 	if (input->IsKeyDown(SDLK_LEFT))
-		yaw -= mouseSpeed;
+	    angleX += mouseSpeed;
 
 	if (input->IsKeyDown(SDLK_RIGHT))
-		yaw += mouseSpeed;
+		angleX -= mouseSpeed;
 
 	//FPS
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+	if (angleY > 89.0f)
+		angleY = 89.0f;
+	if (angleY < -89.0f)
+		angleY = -89.0f;
 
-	camFront.x = Cos(ToRadian(pitch)) * Cos(ToRadian(yaw));
-	camFront.y = Sin(ToRadian(pitch));
-	camFront.z = Cos(ToRadian(pitch)) * Sin(ToRadian(yaw));
+	quatX = Quaternion::FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), ToRadian(angleX));
+    quatY = Quaternion::FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), ToRadian(angleY));
+	quat = quatX * quatY;
+
+	camFront = Quaternion::RotateVector(quat, Vec3(0.0f, 0.0f, -1.0f));
 	camFront = General::Normalize(camFront);
 
 	float camSpeed = 2.0f * timeDelta;
