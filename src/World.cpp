@@ -45,7 +45,8 @@ std::unique_ptr<Texture> container_n;
 
 Light light = {
 	Vec3(1.2f, 1.5f, 2.0f),
-	Vec3(1.0f, 1.0f, 1.0f)
+	Vec3(1.0f, 1.0f, 1.0f),
+	5.0f
 };
 
 bool InitWorld()
@@ -116,7 +117,7 @@ void RenderWorld(float timeDelta)
 	shader->SetMatrix("projection", projection);
 	shader->SetMatrix("normalMat", NormalMatrix(ScaleMatrix(0.5f, 0.5f, 0.5f)));
 	shader->SetVec3("LightPos", light.pos);
-	shader->SetVec3("LightColor", light.color);
+	shader->SetVec3("LightColor", light.color * light.intensity);
 	shader->SetVec3("camPos", camera->GetPos());
 	shader->SetInt("container", 0);
 	shader->SetInt("container_s", 1);
@@ -131,7 +132,7 @@ void RenderWorld(float timeDelta)
 	l_shader->SetMatrix("model",TranslationMatrix(light.pos.x, light.pos.y, light.pos.z) * ScaleMatrix(0.2f, 0.2f, 0.2f));
 	l_shader->SetMatrix("view", camera->Matrix());
 	l_shader->SetMatrix("projection", projection);
-	l_shader->SetVec3("LightColor", light.color);
+	l_shader->SetVec3("LightColor", light.color * light.intensity);
 
 	LightCube->Draw();
 

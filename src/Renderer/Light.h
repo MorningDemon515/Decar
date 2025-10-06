@@ -7,6 +7,7 @@ struct Light
 {
 	mdm::Vector::Vec3 pos;
 	mdm::Vector::Vec3 color;
+	float intensity;
 };
 
 #endif // !LIGHT_H

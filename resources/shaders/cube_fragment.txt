@@ -36,6 +36,10 @@ void main()
       vec3 specular = spec * light_Color * objectSpecular;
 
        vec3 result = ambient + diffuse + specular;
+
+//HDR
+       result = vec3(1.0) - exp(-result * 1.0);
+//Gamma
        result = pow(result, vec3(1 / 2.2));
        FragColor = vec4(result, 1.0);         
 }

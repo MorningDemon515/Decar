@@ -10,5 +10,11 @@ uniform vec3 LightColor;
 
 void main()
 {
-       FragColor = vec4(LightColor, 1.0);         
+       vec3 result = LightColor;
+
+//HDR
+       result = vec3(1.0) - exp(-result * 1.0);
+//Gamma
+       result = pow(result, vec3(1 / 2.2));
+       FragColor = vec4(result, 1.0);      
 }
