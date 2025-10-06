@@ -10,22 +10,27 @@ uniform vec3 LightPos;
 uniform vec3 LightColor;
 uniform vec3 camPos;
 
-vec3 objectColor = vec3(1.0, 0.0, 0.0);
+uniform sampler2D container;
+uniform sampler2D container_s;
+
+vec3 objectColor = texture(container, texCoords).xyz;
+vec3 objectSpecular = texture(container_s, texCoords).xyz;
 
 void main()
 {
-      vec3 ambient = 0.05 * LightColor;
+      vec3 ambient = 0.05 * LightColor * objectColor;
 
       vec3 norm = normalize(Normals);
       vec3 LightDir = normalize(LightPos - FragPos);
 
       float diff = max(dot(norm, LightDir), 0.0);
-      vec3 diffuse = diff * LightColor;
+      vec3 diffuse = diff * LightColor * objectColor;
 
       vec3 camDir = normalize(camPos - FragPos);
       vec3 halfWayDir = normalize(LightDir + camDir);
-      float spec = pow(max(dot(norm, halfWayDir), 0.0), 64.0f);
+      float spec = pow(max(dot(norm, halfWayDir), 0.0), 32.0f);
+      vec3 specular = spec * LightColor * objectSpecular;
 
-       vec3 result = (ambient + diffuse + spec) * objectColor;
+       vec3 result = ambient + diffuse + specular;
        FragColor = vec4(result, 1.0);         
 }

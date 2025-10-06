@@ -39,6 +39,9 @@ std::unique_ptr<Cube> cube;
 std::unique_ptr<Shader> l_shader;
 std::unique_ptr<Cube> LightCube;
 
+std::unique_ptr<Texture> container;
+std::unique_ptr<Texture> container_s;
+
 Light light = {
 	Vec3(1.2f, 1.5f, 2.0f),
 	Vec3(1.0f, 1.0f, 1.0f)
@@ -65,6 +68,9 @@ bool InitWorld()
 
 	l_shader = std::make_unique<Shader>("resources/shaders/light_vertex.txt", "resources/shaders/light_fragment.txt");
 	LightCube = std::make_unique<Cube>();
+
+	container = std::make_unique<Texture>("resources/container2.png");
+	container_s = std::make_unique<Texture>("resources/container2_specular.png");
 
 	return true;
 }
@@ -110,6 +116,10 @@ void RenderWorld(float timeDelta)
 	shader->SetVec3("LightPos", light.pos);
 	shader->SetVec3("LightColor", light.color);
 	shader->SetVec3("camPos", camera->GetPos());
+	shader->SetInt("container", 0);
+	shader->SetInt("container_s", 1);
+	container->Bind(0);
+	container_s->Bind(1);
 
 	cube->Draw();
 
