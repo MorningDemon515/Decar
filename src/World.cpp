@@ -9,6 +9,7 @@
 #include "Renderer/stb_image.h"
 #include "Renderer/Texture.h"
 #include "Input.h"
+#include "Renderer/Camera.h"
 
 using namespace mdm;
 using namespace Vector;
@@ -51,14 +52,9 @@ std::vector<unsigned int> indices = {
 
 std::unique_ptr<Mesh> Quad;
 
-Vec3 camPos(0.0f, 0.0f, 1.0f);
-Vec3 camUp(0.0f, 1.0f, 0.0f);
-Vec3 camFront(0.0f, 0.0f, -1.0f);
+std::unique_ptr<Camera> camera;
 
 MATRIX model = Identity();
-MATRIX view = ViewMatrixRH(
-	camPos, camPos + camFront, camUp 
-);
 MATRIX projection = PerspectiveMatrixRH(
 	ToRadian(90.0f),
 	(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT,
@@ -88,67 +84,47 @@ bool InitWorld()
 	texture1 = std::make_unique<Texture>("resources/image.jpg");
 	texture2 = std::make_unique<Texture>("resources/image.png");
 
+	camera = std::make_unique<Camera>(Vec3(0.0f, 0.0f, 1.0f));
+
 	return true;
 }
-
-float angleX = 0.0f, angleY = 0.0f;
-Quaternion::QUATERNION quatX = Quaternion::FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), ToRadian(angleX));
-Quaternion::QUATERNION quatY = Quaternion::FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), ToRadian(angleY));
-Quaternion::QUATERNION quat = quatX * quatY;
 
 void RenderWorld(float timeDelta)
 {
 	input->Update();
 
 	float mouseSpeed = 100.0f * timeDelta;
+	float moveSpeed = 2.0f * timeDelta;
 
 	if (input->IsKeyDown(SDLK_UP))
-		angleY += mouseSpeed;
+		camera->Pitch(mouseSpeed);
 
 	if (input->IsKeyDown(SDLK_DOWN))
-		angleY -= mouseSpeed;
+		camera->Pitch(-mouseSpeed);
 
 	if (input->IsKeyDown(SDLK_LEFT))
-	    angleX += mouseSpeed;
+		camera->Yaw(mouseSpeed);
 
 	if (input->IsKeyDown(SDLK_RIGHT))
-		angleX -= mouseSpeed;
+		camera->Yaw(-mouseSpeed);
 
-	//FPS
-	if (angleY > 89.0f)
-		angleY = 89.0f;
-	if (angleY < -89.0f)
-		angleY = -89.0f;
-
-	quatX = Quaternion::FromAxisAngle(Vec3(0.0f, 1.0f, 0.0f), ToRadian(angleX));
-    quatY = Quaternion::FromAxisAngle(Vec3(1.0f, 0.0f, 0.0f), ToRadian(angleY));
-	quat = quatX * quatY;
-
-	camFront = Quaternion::RotateVector(quat, Vec3(0.0f, 0.0f, -1.0f));
-	camFront = General::Normalize(camFront);
-
-	float camSpeed = 2.0f * timeDelta;
 	if (input->IsKeyDown(SDLK_W))
-		camPos += camFront * camSpeed;
+		camera->Forward(moveSpeed);
 
 	if (input->IsKeyDown(SDLK_S))
-		camPos -= camFront * camSpeed;
+		camera->Back(moveSpeed);
 
 	if (input->IsKeyDown(SDLK_A))
-		camPos -= General::Normalize(Cross(camFront, camUp)) * camSpeed;
+		camera->Left(moveSpeed);
 
 	if (input->IsKeyDown(SDLK_D))
-		camPos += General::Normalize(Cross(camFront, camUp)) * camSpeed;
-
-	view = ViewMatrixRH(
-		camPos, camPos + camFront, camUp
-	);
+		camera->Right(moveSpeed);
 
 	renderer->Clear(0.1f, 0.1f, 0.1f);
 
 	shader->Use();
 	shader->SetMatrix("model", model);
-    shader->SetMatrix("view", view);
+    shader->SetMatrix("view", camera->Matrix());
 	shader->SetMatrix("projection", projection);
 
 	shader->SetInt("Texture", 0);
