@@ -39,5 +39,5 @@ void main()
 
        light_Pos = LightPos;//TBN * 
        cam_Pos = camPos;//TBN * 
-       FragPos =  vec3(model * vec4(aPos, 1.0));//TBN * 
+       FragPos = vec3(model * vec4(aPos, 1.0));//TBN * 
 }

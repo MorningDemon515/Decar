@@ -46,7 +46,7 @@ std::unique_ptr<Texture> container_n;
 Light light = {
 	Vec3(1.2f, 1.5f, 2.0f),
 	Vec3(1.0f, 1.0f, 1.0f),
-	5.0f
+	100.0f
 };
 
 bool InitWorld()
