@@ -1,6 +1,6 @@
 #ifdef _MSC_VER
 #include <windows.h>
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 #endif
 
 #include "Main.h"

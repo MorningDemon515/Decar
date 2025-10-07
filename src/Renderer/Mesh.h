@@ -52,4 +52,16 @@ private:
 	std::unique_ptr<Mesh> mesh;
 };
 
+class Plane
+{
+public:
+	Plane();
+	~Plane() { };
+
+	void Draw();
+
+private:
+	std::unique_ptr<Mesh> mesh;
+};
+
 #endif // !MESH_H

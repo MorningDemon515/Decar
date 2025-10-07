@@ -12,6 +12,9 @@
 #include "Renderer/Camera.h"
 #include "Renderer/Light.h"
 
+#include "Renderer/Font.h"
+#include "Renderer/Sprite.h"
+
 using namespace mdm;
 using namespace Vector;
 using namespace Matrix;
@@ -49,6 +52,8 @@ Light light = {
 	100.0f
 };
 
+std::unique_ptr<Rect> quad;
+
 bool InitWorld()
 {
 	SDL_SetWindowTitle(window, "Decar");
@@ -60,6 +65,7 @@ bool InitWorld()
 	//glEnable(GL_CULL_FACE);
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	stbi_set_flip_vertically_on_load(true);
 
@@ -75,8 +81,13 @@ bool InitWorld()
 	container_s = std::make_unique<Texture>("resources/container2_specular.png");
 	container_n = std::make_unique<Texture>("resources/container2_normal.png");
 
+	rect_t rect = { 0 ,0, 100, 100 };
+	quad = std::make_unique<Rect>(rect);
+
 	return true;
 }
+
+float x = 0.0f, y = 0.0f;
 
 void RenderWorld(float timeDelta)
 {
@@ -111,6 +122,7 @@ void RenderWorld(float timeDelta)
 
 	renderer->Clear(0.0f, 0.0f, 0.0f);
 
+	/*
 	shader->Use();
 	shader->SetMatrix("model", ScaleMatrix(0.5f, 0.5f, 0.5f));
     shader->SetMatrix("view", camera->Matrix());
@@ -135,11 +147,27 @@ void RenderWorld(float timeDelta)
 	l_shader->SetVec3("LightColor", light.color * light.intensity);
 
 	LightCube->Draw();
+	*/
+
+	if (input->IsKeyDown(SDLK_UP))
+		y += 100.0f * moveSpeed;
+
+	if (input->IsKeyDown(SDLK_DOWN))
+		y -= 100.0f * moveSpeed;
+
+	if (input->IsKeyDown(SDLK_LEFT))
+		x -= 100.0f * moveSpeed;
+
+	if (input->IsKeyDown(SDLK_RIGHT))
+		x += 100.0f * moveSpeed;
+
+	quad->SetColor(255, 255, 0);
+	quad->Draw(x, y, 1);
 
 	renderer->Present();
 }
 
 void FreeWorld()
 {
-
+	
 }

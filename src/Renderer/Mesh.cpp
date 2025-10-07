@@ -221,3 +221,39 @@ void Cube::Draw()
 {
 	mesh->Draw();
 }
+
+Plane::Plane()
+{
+	std::vector<mdm::Vector::Vec3> positions = {
+		{-1.0f, -1.0f, 0.0f},
+		{ 1.0f, -1.0f, 0.0f},
+		{ 1.0f,  1.0f, 0.0f},
+		{-1.0f,  1.0f, 0.0f}
+	};
+
+	std::vector<mdm::Vector::Vec2> texCoords = {
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{1.0f, 1.0f},
+		{0.0f, 1.0f}
+	};
+
+	std::vector<mdm::Vector::Vec3> normals = {
+		{0.0f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 1.0f}
+	};
+
+	std::vector<unsigned int> indices = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	mesh = std::make_unique<Mesh>(positions, texCoords, normals, indices);
+}
+
+void Plane::Draw()
+{
+	mesh->Draw();
+}

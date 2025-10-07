@@ -51,6 +51,10 @@
     <ClCompile Include="src\Renderer\Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer\Font.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer\Renderer.h">
@@ -74,5 +78,9 @@
     <ClInclude Include="src\Renderer\Light.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Font.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Sprite.h" />
   </ItemGroup>
 </Project>

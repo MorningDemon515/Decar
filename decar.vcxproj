@@ -96,13 +96,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include;src\FreeType\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>src/SDL3/x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>src/SDL3/x86;src\FreeType\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -114,15 +114,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include;src\FreeType\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>src/SDL3/x86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>src/SDL3/x86;src\FreeType\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -132,13 +132,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include;src\FreeType\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>src/SDL3/x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>src/SDL3/x64;src\FreeType\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -150,15 +150,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/SDL3/include;src/OpenGL/include;src\MD_Math_II\include;src\FreeType\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>src/SDL3/x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>src/SDL3/x64;src\FreeType\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>setupapi.lib;winmm.lib;imm32.lib;version.lib;SDL_uclibc.lib;SDL3_test.lib;SDL3-static.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
